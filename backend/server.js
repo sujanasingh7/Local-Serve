@@ -12,7 +12,9 @@ const app = express();
 
 
 // Middleware
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({
+  origin: 'https://local-serve-zeta.vercel.app'
+}));
 app.use(express.json());
 
 // Database connection
