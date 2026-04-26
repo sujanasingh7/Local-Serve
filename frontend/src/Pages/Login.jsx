@@ -1,13 +1,26 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API from '../services/api'
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    navigate('/')
+    setLoading(true)
+    setError('')
+    try {
+      const res = await API.post('/api/auth/login', form)
+      localStorage.setItem('token', res.data.token)
+      navigate('/')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid email or password!')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -22,6 +35,9 @@ export default function Login() {
         </Link>
         <h2>Welcome back</h2>
         <p className="auth-card__sub">Sign in to manage your bookings</p>
+
+        {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
+
         <form onSubmit={submit}>
           <div className="form-group">
             <label>Email Address</label>
@@ -33,8 +49,10 @@ export default function Login() {
             <input type="password" placeholder="••••••••" value={form.password}
               onChange={e => setForm(f => ({ ...f, password: e.target.value }))} required />
           </div>
-          <button type="submit" className="btn btn--primary" style={{ width: '100%', marginTop: '0.5rem', justifyContent: 'center' }}>
-            Sign In
+          <button type="submit" className="btn btn--primary"
+            style={{ width: '100%', marginTop: '0.5rem', justifyContent: 'center' }}
+            disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
         <p className="auth-card__footer">

@@ -31,7 +31,7 @@
 
 /* ─── RESET ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 16px; }
 body {
   font-family: var(--font-body);
   background: var(--bg);
@@ -100,7 +100,7 @@ input, select, textarea, button { font-family: inherit; }
   gap: 0.6rem;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: white;
   text-decoration: none;
   z-index: 10;
@@ -110,8 +110,8 @@ input, select, textarea, button { font-family: inherit; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   border-radius: 10px;
   color: white;
@@ -198,7 +198,7 @@ input, select, textarea, button { font-family: inherit; }
 }
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -455,4 +455,11 @@ input, select, textarea, button { font-family: inherit; }
   .stats-strip { flex-direction: column; }
   .stat { border-right: none; border-bottom: 1px solid var(--border); }
   .stat:last-child { border-bottom: none; }
+}
+@media (max-width: 480px) {
+  .hero__title { font-size: 1.6rem !important; }
+  .hero__badge { font-size: 0.72rem; }
+  .hero__sub { font-size: 0.88rem; }
+  .navbar__logo { font-size: 1rem; }
+  .stat__value { font-size: 1.4rem; }
 }

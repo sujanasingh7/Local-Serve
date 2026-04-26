@@ -1,13 +1,25 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API from '../services/api'
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'customer' })
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    navigate('/')
+    setLoading(true)
+    setError('')
+    try {
+      await API.post('/api/auth/register', form)
+      navigate('/login')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed!')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -28,6 +40,9 @@ export default function Register() {
           <button type="button" className={form.role === 'provider' ? 'active' : ''}
             onClick={() => setForm(f => ({ ...f, role: 'provider' }))}>🔧 I offer services</button>
         </div>
+
+        {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
+
         <form onSubmit={submit}>
           <div className="form-group">
             <label>Full Name</label>
@@ -44,8 +59,10 @@ export default function Register() {
             <input type="password" placeholder="Min 8 characters" value={form.password}
               onChange={e => setForm(f => ({ ...f, password: e.target.value }))} required minLength={8} />
           </div>
-          <button type="submit" className="btn btn--primary" style={{ width: '100%', marginTop: '0.5rem', justifyContent: 'center' }}>
-            Create Account →
+          <button type="submit" className="btn btn--primary"
+            style={{ width: '100%', marginTop: '0.5rem', justifyContent: 'center' }}
+            disabled={loading}>
+            {loading ? 'Creating...' : 'Create Account →'}
           </button>
         </form>
         <p className="auth-card__footer">
